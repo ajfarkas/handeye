@@ -1,0 +1,36 @@
+:root {
+	--spacing: 20px;
+	--background: white;
+	--bordercolor: pink;
+	--spacepad: 2px;
+}
+
+#board {
+	background-color: var(--background);
+}
+
+.board-area {
+	display: inline-flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.row {
+	display: inline-flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.space {
+	width: var(--spacing);
+	height: var(--spacing);
+	margin: calc(var(--spacing) / 2);
+	padding: var(--spacepad);
+	box-shadow:
+		0 0 0 1px var(--bordercolor),
+		inset 0 0 0 var(--spacepad) var(--background);
+}
+.space:focus {
+	background-color: orange;
+	outline: none;
+}
