@@ -1,5 +1,5 @@
 :root {
-	--spacing: 20px;
+	--spacing: 60px;
 	--background: white;
 	--bordercolor: pink;
 	--spacepad: 2px;
@@ -30,7 +30,12 @@
 		0 0 0 1px var(--bordercolor),
 		inset 0 0 0 var(--spacepad) var(--background);
 }
-.space:focus {
-	background-color: orange;
-	outline: none;
+.space.active {
+	background-image: url('./assets/HEROS_PixelPackTOPDOWN8BIT_Dog Idle_D.gif');
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+	/* for FF compatibility */
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
 }

@@ -1,4 +1,6 @@
 const $ = sel => document.querySelector(sel);
+const board = [];
+const position = { x: 0, y: 0 };
 
 const touch = (kind, classlist, attr) => {
 	const el = document.createElement(kind);
@@ -21,8 +23,13 @@ const createRow = len => {
 	const row = touch('div', 'row');
 	let cell;
 
-	for (let i = 0; i < len; i++) {
-		cell = touch('div', 'space', {'tabindex': 1});
+	const rowIndex = board.push([]) - 1;
+
+	for (let colIndex = 0; colIndex < len; colIndex++) {
+		cell = touch('div', 'space', {
+			'tabindex': 1,
+			'data-pos': `${rowIndex},${colIndex}`
+		});
 		row.appendChild(cell);
 	}
 
@@ -41,7 +48,7 @@ const createTableBody = size => {
 };
 
 // lay out the board
-$('#board').appendChild(createTableBody([5, 4]));
+$('#board').appendChild(createTableBody([5, 5]));
 
 /* Deal with keyboard/controller */
 let keypress = false;
@@ -56,10 +63,39 @@ const releaseKey = () => {
 /* Character Positioning */
 const moveChar = e => {
 	if (!keyLocking()) return;
-	console.log(e.key);
+	switch (e.key) {
+		case 'ArrowUp':
+		case 'w':
+		case 'W':
+			// move up
+			break;
+		case 'ArrowRight':
+		case 'd':
+		case 'D':
+			// move right
+			break;
+		case 'ArrowDown':
+		case 's':
+		case 'S':
+			// move down
+			break;
+		case 'ArrowLeft':
+		case 'a':
+		case 'A':
+			// move left
+			break;
+	}
 };
 
+/* Gamepad API */
+const gamepads = navigator.getGamepads;
+window.addEventListener('gamepadconnected', e => {
+	window.pad = gamepads[e.gamepad.index];
+})
+
+/* Key bindings */
 window.addEventListener('keydown', moveChar);
 window.addEventListener('keyup', releaseKey);
+
 // place the starting position
-$('.space').focus();
+$(`[data-pos="${position.x},${position.y}"]`).classList.add('active');
