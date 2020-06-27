@@ -1,8 +1,11 @@
 :root {
-	--spacing: 60px;
+	--spacing: 50px;
 	--background: white;
 	--bordercolor: pink;
 	--spacepad: 2px;
+	--bg-unit: var(--spacing);
+	--bgw: 16;
+	--bgh: 27;
 }
 
 #board {
@@ -24,18 +27,65 @@
 .space {
 	width: var(--spacing);
 	height: var(--spacing);
-	margin: calc(var(--spacing) / 2);
-	padding: var(--spacepad);
-	box-shadow:
-		0 0 0 1px var(--bordercolor),
-		inset 0 0 0 var(--spacepad) var(--background);
+	background-image: url(./assets/PixelPackTOPDOWN8BIT.png);
+	background-size: calc(var(--bg-unit) * var(--bgw));
+	/* for FF compatibility */
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
 }
 .space.active {
+	background-color: #79af36;
 	background-image: url('./assets/HEROS_PixelPackTOPDOWN8BIT_Dog Idle_D.gif');
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-position: center;
-	/* for FF compatibility */
-	image-rendering: crisp-edges;
+}
+
+.bg {
+	width: calc(var(--bg-unit) * var(--bgw));
+	height: calc(var(--bg-unit) * var(--bgh));
+	background: url(./assets/PixelPackTOPDOWN8BIT.png);
+	background-repeat: no-repeat;
+	background-size: contain;
 	image-rendering: pixelated;
+}
+.iso {
+	position: fixed;
+	top: 10px;
+	left: 40px;
+	outline: 3px solid peru;
+	width: 50px;
+	height: 50px;
+	background-size: calc(var(--bg-unit) * var(--bgw));
+	background-position: calc(var(--bg-unit) * -2) calc(var(--bg-unit) * -2);
+}
+.grass-shoots {
+	background-position: calc(var(--bg-unit) * -6) calc(var(--bg-unit) * -2);
+}
+.grass-nw {
+	background-position: calc(var(--bg-unit) * -4) calc(var(--bg-unit) * -19);
+}
+.grass-n {
+	background-position: calc(var(--bg-unit) * -5) calc(var(--bg-unit) * -19);
+}
+.grass-ne {
+	background-position: calc(var(--bg-unit) * -6) calc(var(--bg-unit) * -19);
+}
+.grass-w {
+	background-position: calc(var(--bg-unit) * -4) calc(var(--bg-unit) * -20);
+}
+.grass {
+	background-position: calc(var(--bg-unit) * -5) calc(var(--bg-unit) * -20);
+}
+.grass-e{
+	background-position: calc(var(--bg-unit) * -6) calc(var(--bg-unit) * -20);
+}
+.grass-sw {
+	background-position: calc(var(--bg-unit) * -4) calc(var(--bg-unit) * -21);
+}
+.grass-s {
+	background-position: calc(var(--bg-unit) * -5) calc(var(--bg-unit) * -21);
+}
+.grass-se {
+	background-position: calc(var(--bg-unit) * -6) calc(var(--bg-unit) * -21);
 }

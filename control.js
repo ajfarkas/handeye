@@ -1,11 +1,11 @@
 const $ = sel => document.querySelector(sel);
 const board = [];
-const position = { x: 0, y: 0 };
-let boardDimensions;
+const position = { x: 7, y: 6 };
+const boardXY = {width: 15, height: 13};
 
 const touch = (kind, classlist, attr) => {
 	const el = document.createElement(kind);
-	el.classList.add(classlist);
+	el.className = classlist;
 	if (typeof attr === 'object') {
 		Object.entries(attr).forEach(([a, v]) => {
 			try {
@@ -20,16 +20,28 @@ const touch = (kind, classlist, attr) => {
 };
 
 /* Board Creation */
-const createRow = len => {
+const createRow = (len, height) => {
 	const row = touch('div', 'row');
+	const classbase = 'grass-'
 	let cell;
 
-	const colIndex = board.push([]) - 1;
+	const rowIndex = board.push([]) - 1;
 
-	for (let rowIndex = 0; rowIndex < len; rowIndex++) {
-		cell = touch('div', 'space', {
-			'tabindex': 1,
-			'data-pos': `${rowIndex},${colIndex}`
+	for (let colIndex = 0; colIndex < len; colIndex++) {
+		let cl = classbase;
+
+		if (rowIndex === 0) cl += 'n';
+		else if (rowIndex === height -1) cl += 's';
+		if (colIndex === 0) cl += 'w';
+		else if (colIndex === len - 1) cl += 'e';
+		if (cl === classbase) {
+			const rand = Math.random() * 10;
+			if (rand < 8) cl = cl.replace('-', '');
+			else cl += 'shoots';
+		}
+
+		cell = touch('div', `space ${cl}`, {
+			'data-pos': `${colIndex},${rowIndex}`
 		});
 		row.appendChild(cell);
 	}
@@ -37,20 +49,19 @@ const createRow = len => {
 	return row;
 };
 
-const createTableBody = size => {
+const createTableBody = (size = [boardXY.width, boardXY.height]) => {
 	const body = touch ('div', 'board-area');
 	const [width, height] = size;
-	boardDimensions = { width, height };
 
 	for (let i = 0; i < height; i++) {
-		body.appendChild(createRow(width));
+		body.appendChild(createRow(width, height));
 	}
 
 	return body;
 };
 
 // lay out the board
-$('#board').appendChild(createTableBody([5, 5]));
+$('#board').appendChild(createTableBody());
 
 /* Deal with keyboard/controller */
 let keypress = false;
@@ -85,14 +96,14 @@ const moveChar = e => {
 		case 'ArrowRight':
 		case 'd':
 		case 'D':
-			if (x < boardDimensions.width - 1) {
+			if (x < boardXY.width - 1) {
 				position.x++;
 			}
 			break;
 		case 'ArrowDown':
 		case 's':
 		case 'S':
-			if (y < boardDimensions.height - 1) {
+			if (y < boardXY.height - 1) {
 				position.y++;
 			}
 			break;
