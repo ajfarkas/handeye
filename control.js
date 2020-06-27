@@ -28,18 +28,19 @@ const createRow = (len, height) => {
 	const rowIndex = board.push([]) - 1;
 
 	for (let colIndex = 0; colIndex < len; colIndex++) {
+		// set background tile
 		let cl = classbase;
-
 		if (rowIndex === 0) cl += 'n';
 		else if (rowIndex === height -1) cl += 's';
 		if (colIndex === 0) cl += 'w';
 		else if (colIndex === len - 1) cl += 'e';
 		if (cl === classbase) {
-			const rand = Math.random() * 10;
-			if (rand < 8) cl = cl.replace('-', '');
+			const rand = Math.random() * 100;
+			if (rand < 8) cl = 'flower';
+			else if (rand < 80) cl = cl.replace('-', '');
 			else cl += 'shoots';
 		}
-
+		// create cell
 		cell = touch('div', `space ${cl}`, {
 			'data-pos': `${colIndex},${rowIndex}`
 		});
@@ -48,7 +49,7 @@ const createRow = (len, height) => {
 
 	return row;
 };
-
+// create the board element
 const createTableBody = (size = [boardXY.width, boardXY.height]) => {
 	const body = touch ('div', 'board-area');
 	const [width, height] = size;

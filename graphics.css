@@ -95,3 +95,13 @@
 .grass-se {
 	background-position: calc(var(--bg-unit) * -6) calc(var(--bg-unit) * -21);
 }
+.flower {
+	background-position: calc(var(--bg-unit) * -0) calc(var(--bg-unit) * -10);
+	animation: flower 2s linear forwards infinite;
+}
+@keyframes flower {
+	0% { background-position: calc(var(--bg-unit) * -0) calc(var(--bg-unit) * -10); }
+	0.01% { background-position: calc(var(--bg-unit) * -1) calc(var(--bg-unit) * -10); }
+	49.99% { background-position: calc(var(--bg-unit) * -1) calc(var(--bg-unit) * -10); }
+	50% { background-position: calc(var(--bg-unit) * -0) calc(var(--bg-unit) * -10); }
+}
