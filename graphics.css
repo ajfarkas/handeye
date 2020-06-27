@@ -1,15 +1,48 @@
 :root {
 	--spacing: 50px;
 	--background: white;
-	--bordercolor: pink;
+	--bordercolor: gold;
 	--spacepad: 2px;
 	--bg-unit: var(--spacing);
 	--bgw: 16;
 	--bgh: 27;
 }
 
-#board {
+body { margin: 0; }
+
+#start {
+	position: fixed;
+	left: 50%;
+	top: 40%;
+	padding: 8px 12px;
 	background-color: var(--background);
+	border: 4px solid var(--bordercolor);
+	border-radius: 16px;
+	transform: translate(-50%, -50%);
+	text-transform: uppercase;
+	font-family: Open Sans, Helvetica, sans-serif;
+	font-size: 1.5rem;
+}
+#start.disabled {
+	display: none;
+}
+
+.space,
+.bg {
+	background: url(./assets/PixelPackTOPDOWN8BIT.png);
+	background-size: calc(var(--bg-unit) * var(--bgw));
+	/* for FF compatibility */
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
+}
+
+#board {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
+	background-color: #5b547c;
 }
 
 .board-area {
@@ -28,11 +61,6 @@
 	position: relative;
 	width: var(--spacing);
 	height: var(--spacing);
-	background-image: url(./assets/PixelPackTOPDOWN8BIT.png);
-	background-size: calc(var(--bg-unit) * var(--bgw));
-	/* for FF compatibility */
-	image-rendering: crisp-edges;
-	image-rendering: pixelated;
 }
 .space.active:before {
 	content: '';
@@ -46,16 +74,13 @@
 	background-size: contain;
 	background-position: center;
 }
-
+/* sprite sheet */
 .bg {
 	width: calc(var(--bg-unit) * var(--bgw));
 	height: calc(var(--bg-unit) * var(--bgh));
-	background: url(./assets/PixelPackTOPDOWN8BIT.png);
 	background-repeat: no-repeat;
-	background-size: contain;
-	image-rendering: pixelated;
 }
-.iso {
+#iso {
 	position: fixed;
 	top: 10px;
 	left: 40px;
@@ -63,8 +88,10 @@
 	width: 50px;
 	height: 50px;
 	background-size: calc(var(--bg-unit) * var(--bgw));
-	background-position: calc(var(--bg-unit) * -2) calc(var(--bg-unit) * -2);
+	background-position: calc(var(--bg-unit) * -12) calc(var(--bg-unit) * -25);
 }
+/* end sprite sheet */
+
 .grass-shoots {
 	background-position: calc(var(--bg-unit) * -6) calc(var(--bg-unit) * -2);
 }

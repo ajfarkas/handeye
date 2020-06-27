@@ -1,7 +1,17 @@
 const $ = sel => document.querySelector(sel);
 const board = [];
-const position = { x: 7, y: 6 };
-const boardXY = {width: 15, height: 13};
+const spacing = 50;
+let pad = null;
+
+const boardXY = {
+	width: Math.floor(window.innerWidth / spacing),
+	height: Math.floor(window.innerHeight / spacing),
+};
+const position = {
+	x: Math.floor(boardXY.width / 2),
+	y: Math.floor(boardXY.height / 2)
+};
+
 
 const touch = (kind, classlist, attr) => {
 	const el = document.createElement(kind);
@@ -85,7 +95,7 @@ const activateSpace = () => {
 
 const moveChar = e => {
 	if (!keyLocking()) return;
-	const {x, y} = position
+	const {x, y} = position;
 	switch (e.key) {
 		case 'ArrowUp':
 		case 'w':
@@ -115,16 +125,89 @@ const moveChar = e => {
 				position.x--;
 			}
 			break;
+		case 'Enter':
+			$('#start').classList.add('disabled');
+			return;
 	}
 	
 	activateSpace();
 };
 
 /* Gamepad API */
-const gamepads = navigator.getGamepads;
+const padMap = {
+	'start': 8,
+	'up': 11,
+	'right': 14,
+	'down': 12,
+	'left': 13,
+	'a': 0,
+	'b': 1
+}
+let axesZero;
+let animId;
+let press = false;
+
+const pressedButton = () => {
+	pad = navigator.getGamepads()[padIndex];
+	let btn = null;
+	Object.entries(padMap).some(([name, id]) => {
+		if (pad.buttons[id].pressed) {
+			btn = name;
+			return true;
+		}
+	});
+	return btn;
+}
+
+const checkPadInput = (timer) => {
+	if (!pad) {
+		return cancelAnimationFrame(animId);
+	}
+	const {x, y} = position;
+	const btn = pressedButton();
+	const {axes} = pad;
+
+	// zero out d-pad
+	if (!axesZero && btn === 'start') {
+		$('#start').classList.add('disabled');
+		axesZero = axes;
+	}
+	else if (!press) {
+		if (btn === 'up' && y) {
+			position.y--;
+			press = true;
+		}
+		else if (btn === 'right' && x < boardXY.width - 1) {
+			position.x++;
+			press = true;
+		}
+		else if (btn === 'down' && y < boardXY.height - 1) {
+			position.y++;
+			press = true;
+		}
+		else if (btn === 'left' && x) {
+			position.x--;
+			press = true;
+		}
+	} else if (!btn) {
+		press = false;
+	}
+	if (press) {
+		activateSpace();
+	}
+
+	animId = requestAnimationFrame(checkPadInput);
+}
+
 window.addEventListener('gamepadconnected', e => {
-	window.pad = gamepads[e.gamepad.index];
-})
+	padIndex = e.gamepad.index;
+	pad = navigator.getGamepads()[padIndex];
+	window.requestAnimationFrame(checkPadInput);
+});
+window.addEventListener('gamepaddisconnected', e => {
+	pad = null;
+	$('#start').classList.remove('disabled');
+});
 
 /* Key bindings */
 window.addEventListener('keydown', moveChar);
