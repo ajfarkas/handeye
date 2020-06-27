@@ -1,6 +1,7 @@
 const $ = sel => document.querySelector(sel);
 const board = [];
 const position = { x: 0, y: 0 };
+let boardDimensions;
 
 const touch = (kind, classlist, attr) => {
 	const el = document.createElement(kind);
@@ -23,9 +24,9 @@ const createRow = len => {
 	const row = touch('div', 'row');
 	let cell;
 
-	const rowIndex = board.push([]) - 1;
+	const colIndex = board.push([]) - 1;
 
-	for (let colIndex = 0; colIndex < len; colIndex++) {
+	for (let rowIndex = 0; rowIndex < len; rowIndex++) {
 		cell = touch('div', 'space', {
 			'tabindex': 1,
 			'data-pos': `${rowIndex},${colIndex}`
@@ -39,6 +40,7 @@ const createRow = len => {
 const createTableBody = size => {
 	const body = touch ('div', 'board-area');
 	const [width, height] = size;
+	boardDimensions = { width, height };
 
 	for (let i = 0; i < height; i++) {
 		body.appendChild(createRow(width));
@@ -61,30 +63,49 @@ const releaseKey = () => {
 }
 
 /* Character Positioning */
+const activateSpace = () => {
+	const old = $('.space.active');
+	if (old) {
+		old.classList.remove('active');
+	}
+	$(`[data-pos="${position.x},${position.y}"]`).classList.add('active');
+}
+
 const moveChar = e => {
 	if (!keyLocking()) return;
+	const {x, y} = position
 	switch (e.key) {
 		case 'ArrowUp':
 		case 'w':
 		case 'W':
-			// move up
+			if (y) {
+				position.y--;
+			}
 			break;
 		case 'ArrowRight':
 		case 'd':
 		case 'D':
-			// move right
+			if (x < boardDimensions.width - 1) {
+				position.x++;
+			}
 			break;
 		case 'ArrowDown':
 		case 's':
 		case 'S':
-			// move down
+			if (y < boardDimensions.height - 1) {
+				position.y++;
+			}
 			break;
 		case 'ArrowLeft':
 		case 'a':
 		case 'A':
-			// move left
+			if (x) {
+				position.x--;
+			}
 			break;
 	}
+	
+	activateSpace();
 };
 
 /* Gamepad API */
@@ -98,4 +119,4 @@ window.addEventListener('keydown', moveChar);
 window.addEventListener('keyup', releaseKey);
 
 // place the starting position
-$(`[data-pos="${position.x},${position.y}"]`).classList.add('active');
+activateSpace();
