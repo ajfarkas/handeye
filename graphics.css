@@ -25,6 +25,7 @@
 }
 
 .space {
+	position: relative;
 	width: var(--spacing);
 	height: var(--spacing);
 	background-image: url(./assets/PixelPackTOPDOWN8BIT.png);
@@ -33,8 +34,13 @@
 	image-rendering: crisp-edges;
 	image-rendering: pixelated;
 }
-.space.active {
-	background-color: #79af36;
+.space.active:before {
+	content: '';
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
 	background-image: url('./assets/HEROS_PixelPackTOPDOWN8BIT_Dog Idle_D.gif');
 	background-repeat: no-repeat;
 	background-size: contain;
