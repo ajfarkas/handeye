@@ -135,17 +135,32 @@ const moveChar = e => {
 
 /* Gamepad API */
 const padMap = {
+	'a': 0,
+	'b': 1,
+	'x': 2,
+	'y': 3,
+	'lb': 4,
+	'rb': 5,
+	'lstick': 6,
+	'rstick': 7,
 	'start': 8,
+	'select': 9,
+	'on': 10,
 	'up': 11,
-	'right': 14,
 	'down': 12,
 	'left': 13,
-	'a': 0,
-	'b': 1
+	'right': 14,
 }
-let axesZero;
+const stickMap = {
+	'lx': 0,
+	'ly': 1,
+	'ltrigger': 2,
+	'rx': 3,
+	'ry': 4,
+	'rtrigger': 5
+}
 let animId;
-let press = false;
+let nav = false;
 
 const pressedButton = () => {
 	pad = navigator.getGamepads()[padIndex];
@@ -158,41 +173,66 @@ const pressedButton = () => {
 	});
 	return btn;
 }
+const movedStick = () => {
+	pad = navigator.getGamepads()[padIndex];
+	let command = null;
+	const { lx, ly } = stickMap;
+	const dirStickMap = { lx, ly };
+	Object.entries(dirStickMap).some(([name, id]) => {
+		const val = pad.axes[id];
+		switch (`${name},${val}`) {
+			case 'lx,-1':
+				command = 'left';
+				break;
+			case 'lx,1':
+				command = 'right';
+				break;
+			case 'ly,-1':
+				command = 'up';
+				break;
+			case 'ly,1':
+				command = 'down';
+				break;
+		}
+		return Math.abs(val) === 1;
+	});
+	return command;
+}
 
 const checkPadInput = (timer) => {
 	if (!pad) {
 		return cancelAnimationFrame(animId);
 	}
 	const {x, y} = position;
-	const btn = pressedButton();
+	const btn = pressedButton() || movedStick();
 	const {axes} = pad;
 
 	// zero out d-pad
-	if (!axesZero && btn === 'start') {
-		$('#start').classList.add('disabled');
-		axesZero = axes;
-	}
-	else if (!press) {
-		if (btn === 'up' && y) {
+	if (!nav) {
+		if (btn === 'start') {
+			$('#start').classList.toggle('disabled');
+			nav = true;
+		}
+		else if (btn === 'up' && y) {
 			position.y--;
-			press = true;
+			nav = true;
 		}
 		else if (btn === 'right' && x < boardXY.width - 1) {
 			position.x++;
-			press = true;
+			nav = true;
 		}
 		else if (btn === 'down' && y < boardXY.height - 1) {
 			position.y++;
-			press = true;
+			nav = true;
 		}
 		else if (btn === 'left' && x) {
 			position.x--;
-			press = true;
+			nav = true;
 		}
 	} else if (!btn) {
-		press = false;
+		nav = false;
 	}
-	if (press) {
+	if (nav) {
 		activateSpace();
 	}
 
