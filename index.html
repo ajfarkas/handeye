@@ -4,7 +4,9 @@
 	<title>Video Game Basics</title>
 	<base href=".">
 	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="graphics.css"></link>
+	<link rel="stylesheet" href="graphics.css">
+	<link rel="preload" href="./assets/1BITTopDownMusics-Adventure.wav" as="audio">
+	<link rel="preload" href="./assets/Jump03.wav" as="audio">
 </head>
 <body>
 	<main id="board"></main>
@@ -15,6 +17,8 @@
 	</div>
 	<!-- <div class="bg"></div> -->
 	<!-- <div class="bg" id="iso"></div> -->
+	<audio id="music" autoplay loop></audio>
+	<audio id="sfx" autoplay></audio>
 </body>
 <script type="text/javascript" src="./control.js"></script>
 </html>

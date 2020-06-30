@@ -2,6 +2,7 @@ const $ = sel => document.querySelector(sel);
 const board = [];
 const spacing = 50;
 let pad = null;
+let started = false;
 
 const boardXY = {
 	width: Math.floor(window.innerWidth / spacing),
@@ -84,6 +85,12 @@ const releaseKey = () => {
 	keypress = false;
 }
 
+/* Audio */
+const music = $('#music');
+const sfx = $('#sfx');
+music.volume = 0.5;
+sfx.volume = 1;
+
 /* Character Positioning */
 const activateSpace = () => {
 	const old = $('.space.active');
@@ -92,6 +99,18 @@ const activateSpace = () => {
 	}
 	$(`[data-pos="${position.x},${position.y}"]`).classList.add('active');
 }
+
+const startActivated = () => {
+	if (!started) {
+		started = true;
+		music.src = './assets/1BITTopDownMusics-Adventure.wav';
+	} else if (music.paused) {
+		music.play();
+	} else {
+		music.pause();
+	}
+	$('#start').classList.toggle('disabled');
+};
 
 const moveChar = e => {
 	if (!keyLocking()) return;
@@ -125,8 +144,11 @@ const moveChar = e => {
 				position.x--;
 			}
 			break;
+		case 'z':
+				sfx.setAttribute('src', './assets/Jump03.wav')
+				break;
 		case 'Enter':
-			$('#start').classList.add('disabled');
+			startActivated();
 			return;
 	}
 	
@@ -209,25 +231,38 @@ const checkPadInput = (timer) => {
 
 	// zero out d-pad
 	if (!nav) {
-		if (btn === 'start') {
-			$('#start').classList.toggle('disabled');
-			nav = true;
-		}
-		else if (btn === 'up' && y) {
-			position.y--;
-			nav = true;
-		}
-		else if (btn === 'right' && x < boardXY.width - 1) {
-			position.x++;
-			nav = true;
-		}
-		else if (btn === 'down' && y < boardXY.height - 1) {
-			position.y++;
-			nav = true;
-		}
-		else if (btn === 'left' && x) {
-			position.x--;
-			nav = true;
+		switch(btn) {
+			case 'start':
+				startActivated();
+				nav = true;
+				break;
+			case 'up':
+				if (y) {
+					position.y--;
+					nav = true;
+				}
+				break;
+			case 'right':
+				if (x < boardXY.width - 1) {
+					position.x++;
+					nav = true;
+				}
+				break;
+			case 'down':
+				if (y < boardXY.height - 1) {
+					position.y++;
+					nav = true;
+				}
+				break;
+			case 'left':
+				if (x) {
+					position.x--;
+					nav = true;
+				}
+				break;
+			case 'a':
+				sfx.setAttribute('src', './assets/Jump03.wav')
+				break;
 		}
 	} else if (!btn) {
 		nav = false;
