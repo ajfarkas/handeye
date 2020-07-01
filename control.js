@@ -92,12 +92,16 @@ music.volume = 0.5;
 sfx.volume = 1;
 
 /* Character Positioning */
-const activateSpace = () => {
+const activateSpace = className => {
 	const old = $('.space.active');
+	const list = ['active'];
 	if (old) {
-		old.classList.remove('active');
+		old.classList.remove('active', 'dance');
 	}
-	$(`[data-pos="${position.x},${position.y}"]`).classList.add('active');
+	if (className) list.push(className);
+
+	$(`[data-pos="${position.x},${position.y}"]`)
+		.classList.add(...list);
 }
 
 const startActivated = () => {
@@ -115,6 +119,8 @@ const startActivated = () => {
 const moveChar = e => {
 	if (!keyLocking()) return;
 	const {x, y} = position;
+	let spaceClass = undefined;
+
 	switch (e.key) {
 		case 'ArrowUp':
 		case 'w':
@@ -144,15 +150,18 @@ const moveChar = e => {
 				position.x--;
 			}
 			break;
-		case 'z':
-				sfx.setAttribute('src', './assets/Jump03.wav')
-				break;
+		case 'Shift':
+			sfx.setAttribute('src', './assets/Jump03.wav')
+			break;
+		case ' ':
+			spaceClass = 'dance';
+			break;
 		case 'Enter':
 			startActivated();
 			return;
 	}
 	
-	activateSpace();
+	activateSpace(spaceClass);
 };
 
 /* Gamepad API */
@@ -228,8 +237,9 @@ const checkPadInput = (timer) => {
 	const {x, y} = position;
 	const btn = pressedButton() || movedStick();
 	const {axes} = pad;
+	let spaceClass = undefined;
 
-	// zero out d-pad
+	// if not continuous press, do stuff
 	if (!nav) {
 		switch(btn) {
 			case 'start':
@@ -261,14 +271,19 @@ const checkPadInput = (timer) => {
 				}
 				break;
 			case 'a':
-				sfx.setAttribute('src', './assets/Jump03.wav')
+				sfx.setAttribute('src', './assets/Jump03.wav');
+				nav = true;
+				break;
+			case 'b':
+				spaceClass = 'dance';
+				nav = true;
 				break;
 		}
 	} else if (!btn) {
 		nav = false;
 	}
 	if (nav) {
-		activateSpace();
+		activateSpace(spaceClass);
 	}
 
 	animId = requestAnimationFrame(checkPadInput);

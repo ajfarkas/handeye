@@ -8,6 +8,7 @@
 	--bgh: 28;
 	--sign-d: 3.1rem;
 	--sign: 3.5;
+	--dance: 350ms;
 }
 
 * { margin: 0; }
@@ -119,6 +120,57 @@ h1,
 	background-size: contain;
 	background-position: center;
 }
+.active.dance:before {
+	background-image: url('./assets/HEROS8bit_Dog_Push_R.png');
+	background-size: calc(var(--bg-unit) * 8);
+	background-position: 0 0;
+	animation:
+		danceR var(--dance) linear none 2,
+		danceL var(--dance) calc(var(--dance) * 2) linear none 2,
+		danceR var(--dance) calc(var(--dance) * 4) linear none 2,
+		danceC 15ms calc(var(--dance) * 6) linear forwards 1;
+}
+@keyframes danceR {
+	0% {
+		background-position: 0 0;
+		transform: scaleX(1);
+	}
+	33.32% { background-position: 0 0; }
+	33.33% { background-position: calc(var(--bg-unit) * -1) 0; }
+	66.66% { background-position: calc(var(--bg-unit) * -1) 0; }
+	66.67% { background-position: calc(var(--bg-unit) * -2) 0; }
+	100% {
+		background-position: calc(var(--bg-unit) * -2) 0;
+		transform: scaleX(1);
+	}
+}
+@keyframes danceL {
+	0% {
+		background-position: 0 0;
+		transform: scaleX(-1);
+	}
+	33.32% { background-position: 0 0; }
+	33.33% { background-position: calc(var(--bg-unit) * -1) 0; }
+	66.66% { background-position: calc(var(--bg-unit) * -1) 0; }
+	66.67% { background-position: calc(var(--bg-unit) * -2) 0; }
+	100% {
+		background-position: calc(var(--bg-unit) * -2) 0;
+		transform: scaleX(-1);
+	}
+}
+@keyframes danceC {
+	from {
+		background-image: url('./assets/HEROS_PixelPackTOPDOWN8BIT_Dog Idle_D.gif');
+		background-position: center;
+		background-size: var(--bg-unit);
+	}
+	to {
+		background-image: url('./assets/HEROS_PixelPackTOPDOWN8BIT_Dog Idle_D.gif');
+		background-position: center;
+		background-size: var(--bg-unit);
+	}
+}
+
 /* sprite sheet */
 .bg {
 	width: calc(var(--bg-unit) * var(--bgw));
