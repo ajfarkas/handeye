@@ -192,6 +192,7 @@ const stickMap = {
 }
 let animId;
 let nav = false;
+let pressing = false;
 
 const pressedButton = () => {
 	pad = navigator.getGamepads()[padIndex];
@@ -240,49 +241,48 @@ const checkPadInput = (timer) => {
 	let spaceClass = undefined;
 
 	// if not continuous press, do stuff
-	if (!nav) {
+	if (!pressing) {
+		pressing = true;
+		nav = true;
 		switch(btn) {
 			case 'start':
 				startActivated();
-				nav = true;
 				break;
 			case 'up':
 				if (y) {
 					position.y--;
-					nav = true;
 				}
 				break;
 			case 'right':
 				if (x < boardXY.width - 1) {
 					position.x++;
-					nav = true;
 				}
 				break;
 			case 'down':
 				if (y < boardXY.height - 1) {
 					position.y++;
-					nav = true;
 				}
 				break;
 			case 'left':
 				if (x) {
 					position.x--;
-					nav = true;
 				}
 				break;
 			case 'a':
 				sfx.setAttribute('src', './assets/Jump03.wav');
-				nav = true;
 				break;
 			case 'b':
 				spaceClass = 'dance';
-				nav = true;
 				break;
+			default:
+				pressing = false;
+				nav = false;
 		}
 	} else if (!btn) {
-		nav = false;
+		pressing = false;
 	}
 	if (nav) {
+		nav = false;
 		activateSpace(spaceClass);
 	}
 
