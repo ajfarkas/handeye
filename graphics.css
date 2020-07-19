@@ -130,6 +130,13 @@ h1,
 		danceR var(--dance) calc(var(--dance) * 4) linear none 2,
 		danceC 15ms calc(var(--dance) * 6) linear forwards 1;
 }
+.active.jump:before {
+	animation: jump 250ms ease-out alternate 2;
+}
+@keyframes jump {
+	from { transform: translateY(0); }
+	to { transform: translateY(-80%); }
+}
 @keyframes danceR {
 	0% {
 		background-position: 0 0;

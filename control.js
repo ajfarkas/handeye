@@ -91,17 +91,25 @@ const sfx = $('#sfx');
 music.volume = 0.5;
 sfx.volume = 1;
 
+const actions = [
+	'active',
+	'dance',
+	'jump'
+];
 /* Character Positioning */
 const activateSpace = className => {
 	const old = $('.space.active');
 	const list = ['active'];
 	if (old) {
-		old.classList.remove('active', 'dance');
+		old.classList.remove(...actions);
 	}
 	if (className) list.push(className);
 
-	$(`[data-pos="${position.x},${position.y}"]`)
-		.classList.add(...list);
+	const space = $(`[data-pos="${position.x},${position.y}"]`)
+	space.classList.add(...list);
+	// space.addEventListener('animationend', () => {
+	// 	space.classList.remove(...actions.slice(1));
+	// }, { once: true });
 }
 
 const startActivated = () => {
@@ -151,7 +159,8 @@ const moveChar = e => {
 			}
 			break;
 		case 'Shift':
-			sfx.setAttribute('src', './assets/Jump03.wav')
+			sfx.setAttribute('src', './assets/Jump03.wav');
+			spaceClass = 'jump';
 			break;
 		case ' ':
 			spaceClass = 'dance';
@@ -270,6 +279,7 @@ const checkPadInput = (timer) => {
 				break;
 			case 'a':
 				sfx.setAttribute('src', './assets/Jump03.wav');
+				spaceClass = 'jump';
 				break;
 			case 'b':
 				spaceClass = 'dance';
