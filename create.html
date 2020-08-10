@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Create 16-bit icons</title>
+	<style type="text/css">
+		table {
+			border: 1px solid black;
+			border-collapse: collapse;
+		}
+		td {
+			width: 16px;
+			height: 16px;
+			border: solid #dedede;
+			border-width: 1px 1px 1px 1px ;
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<table>
+			<tbody id="drawing"></tbody>
+		</table>
+	</div>
+	<canvas id="recording" width="16" height="16">
+		<p>HTML <code>Canvas</code> is not supported on this browser.</p>
+	</canvas>
+</body>
+<script type="text/javascript">
+	// Canvas script
+	const canvas = document.getElementById('recording');
+	const ctx = canvas.getContext('2d');
+	let color = '#f00';
+
+	const draw = ev => {
+		const target = ev.currentTarget;
+		const { coords } = target.dataset;
+		const [x, y] = coords.split(',');
+
+		if (color.match(/^#?[0-9a-fA-F]{3}/)) {
+			const nums = color.replace('#', '')
+				.split('')
+				.map(n => parseInt(''+n+n, 16));
+			color = `rgb(${nums.join(',')})`;
+		} else if (color.match(/^#?[0-9a-fA-F]{6}/)) {
+			const nums = color.replace('#', '')
+				.match(/.{2}/g)
+				.map(n => parseInt(''+n, 16));
+			color = `rgb(${nums.join(',')})`;
+		} else if (!color || color === 'transparent') {
+			color = 'rgba(0,0,0,0)';
+		}
+
+		target.style.backgroundColor = color;
+		ctx.fillStyle = color;
+		ctx.fillRect(x,y,1,1);
+	}
+		// Create table
+	const table = document.getElementById('drawing');
+	for (let y = 0; y < 16; y++) {
+		const row = document.createElement('tr');
+		for (let x = 0; x < 16; x++) {
+			const cell = document.createElement('td');
+			cell.dataset.coords = `${x},${y}`;
+			cell.addEventListener('click', draw);
+			row.appendChild(cell);
+		}
+		table.appendChild(row);
+	}
+</script>
+</html>
