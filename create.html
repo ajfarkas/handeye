@@ -11,11 +11,15 @@
 		table {
 			border: 1px solid black;
 			border-collapse: collapse;
+			background-image: url(./create-assets/transparent-bg.png);
+			background-size: 33.33%;
+			image-rendering: crisp-edges;
+			image-rendering: pixelated;
 		}
 		td {
 			width: 16px;
 			height: 16px;
-			border: solid #dedede;
+			border: solid #aaa;
 			border-width: 1px 1px 1px 1px ;
 		}
 		fieldset, label {
@@ -91,8 +95,12 @@
 		const [x, y] = coords.split(',');
 
 		target.style.backgroundColor = color;
-		ctx.fillStyle = color;
-		ctx.fillRect(x,y,1,1);
+		if (color === '') {
+			ctx.clearRect(x,y,1,1);
+		} else {
+			ctx.fillStyle = color;
+			ctx.fillRect(x,y,1,1);
+		}
 		smImg.src = canvas.toDataURL();
 		bigImg.src = canvas.toDataURL();
 	}
