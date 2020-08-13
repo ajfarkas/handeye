@@ -1,0 +1,44 @@
+p {
+	font-size: 1rem;
+	margin: 0;
+}
+#workspace { margin-bottom: 1rem; }
+table {
+	border: 1px solid black;
+	border-collapse: collapse;
+	background-image: url(./create-assets/transparent-bg.png);
+	background-size: 33.33%;
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
+}
+td {
+	width: 16px;
+	height: 16px;
+	border: solid #aaa;
+	border-width: 1px 1px 1px 1px ;
+}
+fieldset, label {
+	display: inline-block;
+}
+label {
+	vertical-align: top;
+	margin-right: 5px;
+}
+.label {
+	margin: 0 0 5px;
+}
+#dropper.isActive { background-color: gold; }
+img {
+	outline: 1px solid #222;
+}
+#pixelart {
+	width: 16px;
+	height: 16px;
+}
+#image {
+	width: 128px;
+	height: 128px;
+	/* for FF compatibility */
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
+}
