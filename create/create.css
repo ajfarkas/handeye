@@ -27,13 +27,29 @@ label {
 .label {
 	margin: 0 0 5px;
 }
-#dropper.isActive { background-color: gold; }
-img {
-	outline: 1px solid #222;
-}
-#pixelart {
+.alpha-btn {
 	width: 16px;
 	height: 16px;
+	background-color: white;
+	background-image: url('./create-assets/transparent-bg.png');
+	background-size: 533.3%;
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
+	border: 2px solid #fff;
+	border-radius: 2px;
+	box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.4);
+	outline: 1px solid #222;
+}
+.img-upload {
+	display: block;
+	margin-top: 10px;
+	padding: 4px;
+	border: 1px solid #222;
+	border-radius: 3px;
+}
+#dropper.isActive { background-color: gold; }
+img, canvas {
+	outline: 1px solid #222;
 }
 #image {
 	width: 128px;

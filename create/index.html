@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Create 16-bit icons</title>
-	<style type="text/css" link="create.scss"></style>
+	<link rel="stylesheet" href="create.css"></link>
 </head>
 <body>
 	<div id="workspace">
@@ -18,19 +18,26 @@
 				</label>
 				<label>
 					<p class="label">Input Color</p>
-					<input type="text" id="color-text"/>
+					<input type="text" id="color-text" value="#000000"/>
+				</label>
+				<label>
+					<p class="label">Transparent</p>
+					<button type="button" class="alpha-btn"></button>
 				</label>
 				<label>
 					<p class="label">Copy Color</p>
 					<button type="button" id="dropper">!</button>
 				</label>
+				<label class="img-upload">
+					<p class="label">Upload Image</p>
+					<input type="file" id="upload" accept="image/*"/>
+				</label>
 			</form>
 		</fieldset>
 	</div>
-	<p>True-size rendering (right-click to save)</p>
-	<img id="pixelart" />
+	<p>True-size rendering (right-click image to save)</p>
 	<img id="image" />
-	<canvas id="recording" width="16" height="16" style="display:none">
+	<canvas id="recording" width="16" height="16">
 		<p>HTML <code>Canvas</code> is not supported on this browser.</p>
 	</canvas>
 </body>

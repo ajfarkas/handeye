@@ -1,8 +1,8 @@
 // Canvas script
 const canvas = document.getElementById('recording');
-const smImg = document.getElementById('pixelart');
-const bigImg = document.getElementById('image');
+const img = document.getElementById('image');
 const ctx = canvas.getContext('2d');
+const imageCells = [];
 let color = '#000';
 let dropperActive = false;
 
@@ -13,14 +13,13 @@ const draw = ev => {
 	const [x, y] = coords.split(',');
 
 	target.style.backgroundColor = color;
-	if (color === '') {
+	if (color === 'transparent') {
 		ctx.clearRect(x,y,1,1);
 	} else {
 		ctx.fillStyle = color;
 		ctx.fillRect(x,y,1,1);
 	}
-	smImg.src = canvas.toDataURL();
-	bigImg.src = canvas.toDataURL();
+	img.src = canvas.toDataURL();
 }
 // Create table
 const table = document.getElementById('drawing');
@@ -30,6 +29,7 @@ for (let y = 0; y < 16; y++) {
 		const cell = document.createElement('td');
 		cell.dataset.coords = `${x},${y}`;
 		row.appendChild(cell);
+		imageCells.push(cell);
 	}
 	table.appendChild(row);
 }
@@ -38,6 +38,7 @@ table.addEventListener('click', draw);
 // Choose color
 const picker = document.getElementById('color-picker');
 const hexColor = document.getElementById('color-text');
+const alphaBtn = document.querySelector('.alpha-btn');
 const dropper = document.getElementById('dropper');
 
 const convertColorValue = colorVal => {
@@ -55,8 +56,8 @@ const convertColorValue = colorVal => {
 			.split('')
 			.map(n => ''+n+n);
 		colorVal = `#${nums.join('')}`;
-	} else if (!colorVal || colorVal === 'transparent') {
-		colorVal = '';
+	} else if (!colorVal) {
+		colorVal = 'transparent';
 	}
 	return colorVal;
 }
@@ -67,11 +68,19 @@ const changeColor = ev => {
 
 	color = convertColorValue(value);
 	picker.value = color || '#ffffff';
+	hexColor.value = color;
 	cancelDropper();
 };
 
 picker.addEventListener('change', changeColor);
 hexColor.addEventListener('change', changeColor);
+// set color to transparent
+const useAlpha0 = () => {
+	color = 'transparent';
+	picker.value = '#ffffff';
+	hexColor.value = 'transparent';
+}
+alphaBtn.addEventListener('click', useAlpha0);
 // update color by selecting coordinate
 const dropperColor = ev => {
 	const { target } = ev;
@@ -79,8 +88,13 @@ const dropperColor = ev => {
 	if (target !== table) {
 		cancelDropper();
 		const bgColor = convertColorValue(target.style.backgroundColor);
-		color = bgColor || 'transparent';
-		picker.value = bgColor || '#ffffff';
+		if (bgColor) {
+			color = bgColor;
+			picker.value = bgColor;
+		} else {
+			useAlpha0();
+		}
+		
 	}
 }
 dropper.addEventListener('click', () => {
@@ -98,3 +112,28 @@ const cancelDropper = () => {
 		table.addEventListener('click', draw);
 	}
 };
+
+const uploader = document.getElementById('upload');
+uploader.addEventListener('change', ev => {
+	const file = uploader.files[0];
+	const reader = new FileReader();
+	reader.onloadend = () => {
+		const { result } = reader;
+		img.src = result;
+		ctx.drawImage(img,0,0,16,16);
+		const imgData = ctx.getImageData(0,0,16,16).data;
+		const pixels = imgData.join(',')
+			.match(/(\d+,?){1,4}/g)
+			.map(pix => (
+				'rgba('+
+				pix.replace(/,$/, '').split(',')
+					.map((c, ci) =>  ci === 3 ? c / 255 : c)
+					.join(',')+
+				')'
+			));
+		pixels.forEach((p, pi) => {
+			imageCells[pi].style.backgroundColor = p;
+		})
+	}
+	reader.readAsDataURL(file);
+})
