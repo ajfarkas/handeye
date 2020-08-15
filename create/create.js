@@ -116,32 +116,34 @@ const cancelDropper = () => {
 const uploader = document.getElementById('upload');
 const imgXInput = document.getElementById('img-x');
 const imgYInput = document.getElementById('img-y');
+const reader = new FileReader();
+// use reader file data to draw to img/canvas
+reader.onloadend = () => {
+	const { result } = reader;
+	const x = imgXInput.value || 0;
+	const y = imgYInput.value || 0;
+	// draw to translate to canvas
+	img.src = result;
+	ctx.clearRect(0,0,16,16);
+	ctx.drawImage(img,x,y,16,16,0,0,16,16);
+	// draw at appropriate crop
+	img.src = canvas.toDataURL();
+	const imgData = ctx.getImageData(0,0,16,16).data;
+	const pixels = imgData.join(',')
+		.match(/(\d+,?){1,4}/g)
+		.map(pix => (
+			'rgba('+
+			pix.replace(/,$/, '').split(',')
+				.map((c, ci) =>  ci === 3 ? c / 255 : c)
+				.join(',')+
+			')'
+		));
+	pixels.forEach((p, pi) => {
+		imageCells[pi].style.backgroundColor = p;
+	})
+}
 uploader.addEventListener('change', ev => {
 	const file = uploader.files[0];
-	const reader = new FileReader();
-	reader.onloadend = () => {
-		const { result } = reader;
-		const x = imgXInput.value || 0;
-		const y = imgYInput.value || 0;
-		// draw to translate to canvas
-		img.src = result;
-		ctx.drawImage(img,x,y,16,16,0,0,16,16);
-		// draw at appropriate crop
-		img.src = canvas.toDataURL();
-		const imgData = ctx.getImageData(0,0,16,16).data;
-		const pixels = imgData.join(',')
-			.match(/(\d+,?){1,4}/g)
-			.map(pix => (
-				'rgba('+
-				pix.replace(/,$/, '').split(',')
-					.map((c, ci) =>  ci === 3 ? c / 255 : c)
-					.join(',')+
-				')'
-			));
-		pixels.forEach((p, pi) => {
-			imageCells[pi].style.backgroundColor = p;
-		})
-	}
 	// trigger read
-	reader.readAsDataURL(file);
+	if (file) reader.readAsDataURL(file);
 })
