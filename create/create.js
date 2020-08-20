@@ -51,7 +51,8 @@ table.addEventListener('mouseleave', removeMouseEnter);
 
 // Choose color
 const picker = document.getElementById('color-picker');
-const hexColor = document.getElementById('color-text');
+const colorText = document.getElementById('color-text');
+const colorChip = document.getElementById('color-chip');
 const alphaBtn = document.querySelector('.alpha-btn');
 const dropper = document.getElementById('dropper');
 
@@ -78,21 +79,26 @@ const convertColorValue = colorVal => {
 // update color from input
 const changeColor = ev => {
 	const target = ev.currentTarget;
-	const { value } = target;
+	let { value } = target;
+
+	if (!value.match(/\W/)) {
+		colorChip.style.backgroundColor = value;
+		value = getComputedStyle(colorChip).backgroundColor;
+	}
 
 	color = convertColorValue(value);
 	picker.value = color || '#ffffff';
-	hexColor.value = color;
+	colorText.value = color;
 	cancelDropper();
 };
 
 picker.addEventListener('change', changeColor);
-hexColor.addEventListener('change', changeColor);
+colorText.addEventListener('change', changeColor);
 // set color to transparent
 const useAlpha0 = () => {
 	color = 'transparent';
 	picker.value = '#ffffff';
-	hexColor.value = 'transparent';
+	colorText.value = 'transparent';
 }
 alphaBtn.addEventListener('click', useAlpha0);
 // update color by selecting coordinate
