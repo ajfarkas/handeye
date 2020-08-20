@@ -33,7 +33,21 @@ for (let y = 0; y < 16; y++) {
 	}
 	table.appendChild(row);
 }
+// click to draw
 table.addEventListener('click', draw);
+// drag and draw
+table.addEventListener('mousedown', () => {
+	imageCells.forEach(cell => {
+		cell.addEventListener('mouseenter', draw);
+	});
+});
+const removeMouseEnter = () => {
+	imageCells.forEach(cell => {
+		cell.removeEventListener('mouseenter', draw);
+	});
+};
+table.addEventListener('mouseup', removeMouseEnter);
+table.addEventListener('mouseleave', removeMouseEnter);
 
 // Choose color
 const picker = document.getElementById('color-picker');
