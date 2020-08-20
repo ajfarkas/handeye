@@ -1,4 +1,5 @@
 // Canvas script
+const html = document.querySelector('html');
 const canvas = document.getElementById('recording');
 const img = document.getElementById('image');
 const ctx = canvas.getContext('2d');
@@ -22,21 +23,29 @@ const draw = ev => {
 	img.src = canvas.toDataURL();
 }
 // Create table
-const table = document.getElementById('drawing');
-for (let y = 0; y < 16; y++) {
-	const row = document.createElement('tr');
-	for (let x = 0; x < 16; x++) {
-		const cell = document.createElement('td');
-		cell.dataset.coords = `${x},${y}`;
-		row.appendChild(cell);
-		imageCells.push(cell);
+const table = document.getElementById('drawing-table');
+const tbody = document.getElementById('drawing');
+const createTable = (w, h) => {
+	// clear previous table
+	tbody.innerHTML = '';
+	table.style.width = `${w * 19 + 1}px`;
+	// table.style.height = `${w * 19 + 1}px`;
+	for (let y = 0; y < h; y++) {
+		const row = document.createElement('tr');
+		for (let x = 0; x < w; x++) {
+			const cell = document.createElement('td');
+			cell.dataset.coords = `${x},${y}`;
+			row.appendChild(cell);
+			imageCells.push(cell);
+		}
+		tbody.appendChild(row);
 	}
-	table.appendChild(row);
-}
+};
+createTable(16,16);
 // click to draw
-table.addEventListener('click', draw);
+tbody.addEventListener('click', draw);
 // drag and draw
-table.addEventListener('mousedown', () => {
+tbody.addEventListener('mousedown', () => {
 	imageCells.forEach(cell => {
 		cell.addEventListener('mouseenter', draw);
 	});
@@ -46,8 +55,8 @@ const removeMouseEnter = () => {
 		cell.removeEventListener('mouseenter', draw);
 	});
 };
-table.addEventListener('mouseup', removeMouseEnter);
-table.addEventListener('mouseleave', removeMouseEnter);
+tbody.addEventListener('mouseup', removeMouseEnter);
+tbody.addEventListener('mouseleave', removeMouseEnter);
 
 // Choose color
 const picker = document.getElementById('color-picker');
@@ -105,7 +114,7 @@ alphaBtn.addEventListener('click', useAlpha0);
 const dropperColor = ev => {
 	const { target } = ev;
 	// get color and prevent target update
-	if (target !== table) {
+	if (target !== tbody) {
 		cancelDropper();
 		const bgColor = convertColorValue(target.style.backgroundColor);
 		if (bgColor) {
@@ -120,16 +129,16 @@ const dropperColor = ev => {
 dropper.addEventListener('click', () => {
 	dropperActive = true;
 	dropper.classList.add('isActive');
-	table.removeEventListener('click', draw);
-	table.addEventListener('click', dropperColor);
+	tbody.removeEventListener('click', draw);
+	tbody.addEventListener('click', dropperColor);
 });
 
 const cancelDropper = () => {
 	if (dropperActive) {
 		dropperActive = false;
 		dropper.classList.remove('isActive');
-		table.removeEventListener('click', dropperColor);
-		table.addEventListener('click', draw);
+		tbody.removeEventListener('click', dropperColor);
+		tbody.addEventListener('click', draw);
 	}
 };
 
@@ -167,3 +176,32 @@ uploader.addEventListener('change', ev => {
 	// trigger read
 	if (file) reader.readAsDataURL(file);
 })
+
+/* Artboard Setup */
+// Dark Mode
+const darkBtn = document.getElementById('darkmode');
+if (localStorage.darkmode === 'true') {
+	darkBtn.checked = true;
+	html.classList.add('dark');
+}
+darkBtn.addEventListener('change', ev => {
+	const { currentTarget } = ev;
+	if (currentTarget.checked) {
+		html.classList.add('dark');
+		return localStorage.darkmode = true;
+	}
+	html.classList.remove('dark');
+	return delete localStorage.darkmode;
+});
+// Resize Artboard
+const boardW = document.getElementById('board-w');
+const boardH = document.getElementById('board-h');
+const resizeBtn = document.getElementById('board-btn');
+
+resizeBtn.addEventListener('click', () => {
+	const w = parseInt(boardW.value);
+	const h = parseInt(boardH.value);
+
+	createTable(w,h);
+});
+

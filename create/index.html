@@ -5,8 +5,29 @@
 	<link rel="stylesheet" href="create.css"></link>
 </head>
 <body>
+	<h1>Create Pixel Art Icons</h1>
+	<div id="setup">
+		<fieldset>
+			<legend>Artboard Setup</legend>
+			<form>
+				<label class="block">
+					<span class="label">Dark Mode</span>
+					<input type="checkbox" id="darkmode"/>
+				</label>
+				<label>
+					<p class="label">Width (px)</p>
+					<input type="number" id="board-w" min="1" step="1" value="16"/>
+				</label>
+				<label>
+					<p class="label">Height (px)</p>
+					<input type="number" id="board-h" min="1" step="1" value="16"/>
+				</label>
+				<button type="button" id="board-btn">Clear & Resize</button>
+			</form>
+		</fieldset>
+	</div>
 	<div id="workspace">
-		<table>
+		<table id="drawing-table">
 			<tbody id="drawing"></tbody>
 		</table>
 		<fieldset>
@@ -29,17 +50,17 @@
 					<p class="label">Copy Color</p>
 					<button type="button" id="dropper">!</button>
 				</label>
-				<div class="img-upload">
+				<div class="img-upload block">
 					<label class="label" id="upload-label">Upload Image</label>
 					<input type="file" id="upload" accept="image/*" aria-labeledby="#upload-label"/>
 					<br/>
 					<label>
 						<p class="label">X-Offset</p>
-						<input type="number" id="img-x" value="0"/>
+						<input type="number" id="img-x" step="1" value="0"/>
 					</label>
 					<label>
 						<p class="label">Y-Offset</p>
-						<input type="number" id="img-y" value="0"/>
+						<input type="number" id="img-y" step="1" value="0"/>
 					</label>
 				</div>
 			</form>
