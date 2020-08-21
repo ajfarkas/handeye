@@ -25,14 +25,13 @@ table {
 	border: 1px solid black;
 	border-collapse: collapse;
 	background-image: url(./create-assets/transparent-bg.png);
-	background-size: 33.33%;
 	image-rendering: crisp-edges;
 	image-rendering: pixelated;
 }
 td {
 	display: inline-block;
-	width: 16px;
-	height: 16px;
+	width: 17px;
+	height: 17px;
 	border: solid #aaa;
 	border-width: 0 1px 1px 0 ;
 }
@@ -70,7 +69,7 @@ span, input {
 	height: 16px;
 	background-color: white;
 	background-image: url('./create-assets/transparent-bg.png');
-	background-size: 533.3%;
+	background-size: 131%;
 	image-rendering: crisp-edges;
 	image-rendering: pixelated;
 	border: 2px solid #fff;

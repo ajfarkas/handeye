@@ -4,6 +4,8 @@ const canvas = document.getElementById('recording');
 const img = document.getElementById('image');
 const ctx = canvas.getContext('2d');
 const imageCells = [];
+let width = 16;
+let height = 16;
 let color = '#000';
 let dropperActive = false;
 
@@ -28,8 +30,7 @@ const tbody = document.getElementById('drawing');
 const createTable = (w, h) => {
 	// clear previous table
 	tbody.innerHTML = '';
-	table.style.width = `${w * 19 + 1}px`;
-	// table.style.height = `${w * 19 + 1}px`;
+	table.style.width = `${w * 20 + 1}px`;
 	for (let y = 0; y < h; y++) {
 		const row = document.createElement('tr');
 		for (let x = 0; x < w; x++) {
@@ -40,8 +41,11 @@ const createTable = (w, h) => {
 		}
 		tbody.appendChild(row);
 	}
+	// update canvas
+	canvas.width = width;
+	canvas.height = height;
 };
-createTable(16,16);
+createTable(width,height);
 // click to draw
 tbody.addEventListener('click', draw);
 // drag and draw
@@ -153,11 +157,11 @@ reader.onloadend = () => {
 	const y = imgYInput.value || 0;
 	// draw to translate to canvas
 	img.src = result;
-	ctx.clearRect(0,0,16,16);
-	ctx.drawImage(img,x,y,16,16,0,0,16,16);
+	ctx.clearRect(0,0,width,height);
+	ctx.drawImage(img,x,y,width,height,0,0,width,height);
 	// draw at appropriate crop
 	img.src = canvas.toDataURL();
-	const imgData = ctx.getImageData(0,0,16,16).data;
+	const imgData = ctx.getImageData(0,0,width,height).data;
 	const pixels = imgData.join(',')
 		.match(/(\d+,?){1,4}/g)
 		.map(pix => (
@@ -201,7 +205,9 @@ const resizeBtn = document.getElementById('board-btn');
 resizeBtn.addEventListener('click', () => {
 	const w = parseInt(boardW.value);
 	const h = parseInt(boardH.value);
+	width = w;
+	height = h;
 
-	createTable(w,h);
+	createTable(w, h);
 });
 
