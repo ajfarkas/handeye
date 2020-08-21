@@ -153,11 +153,10 @@ const reader = new FileReader();
 // use reader file data to draw to img/canvas
 reader.onloadend = () => {
 	const { result } = reader;
-	const x = imgXInput.value || 0;
-	const y = imgYInput.value || 0;
+	const x = parseInt(imgXInput.value) || 0;
+	const y = parseInt(imgYInput.value) || 0;
 	// draw to translate to canvas
 	img.src = result;
-	ctx.clearRect(0,0,width,height);
 	ctx.drawImage(img,x,y,width,height,0,0,width,height);
 	// draw at appropriate crop
 	img.src = canvas.toDataURL();
@@ -173,13 +172,16 @@ reader.onloadend = () => {
 		));
 	pixels.forEach((p, pi) => {
 		imageCells[pi].style.backgroundColor = p;
-	})
-}
+	});
+};
 uploader.addEventListener('change', ev => {
 	const file = uploader.files[0];
 	// trigger read
-	if (file) reader.readAsDataURL(file);
-})
+	if (file) {
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+		reader.readAsDataURL(file);
+	}
+});
 
 /* Artboard Setup */
 // Dark Mode
