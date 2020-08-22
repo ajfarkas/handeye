@@ -28,6 +28,9 @@ table {
 	image-rendering: crisp-edges;
 	image-rendering: pixelated;
 }
+.dark table {
+	background-image: url(./create-assets/transparent-bg-dark.png);
+}
 td {
 	display: inline-block;
 	width: 17px;
@@ -88,8 +91,6 @@ img, canvas {
 	outline: 1px solid #222;
 }
 #image {
-	width: 128px;
-	height: 128px;
 	/* for FF compatibility */
 	image-rendering: crisp-edges;
 	image-rendering: pixelated;

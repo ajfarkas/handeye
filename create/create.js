@@ -30,6 +30,8 @@ const tbody = document.getElementById('drawing');
 const createTable = (w, h) => {
 	// clear previous table
 	tbody.innerHTML = '';
+	imageCells.splice(0);
+	img.src = '';
 	table.style.width = `${w * 20 + 1}px`;
 	for (let y = 0; y < h; y++) {
 		const row = document.createElement('tr');
@@ -44,6 +46,9 @@ const createTable = (w, h) => {
 	// update canvas
 	canvas.width = width;
 	canvas.height = height;
+	// update img
+	img.width = 8 * width;
+	img.height = 8 * height;
 };
 createTable(width,height);
 // click to draw
@@ -147,6 +152,7 @@ const cancelDropper = () => {
 };
 
 const uploader = document.getElementById('upload');
+const reuploader = document.getElementById('re-upload');
 const imgXInput = document.getElementById('img-x');
 const imgYInput = document.getElementById('img-y');
 const reader = new FileReader();
@@ -156,32 +162,38 @@ reader.onloadend = () => {
 	const x = parseInt(imgXInput.value) || 0;
 	const y = parseInt(imgYInput.value) || 0;
 	// draw to translate to canvas
-	img.src = result;
-	ctx.drawImage(img,x,y,width,height,0,0,width,height);
-	// draw at appropriate crop
-	img.src = canvas.toDataURL();
-	const imgData = ctx.getImageData(0,0,width,height).data;
-	const pixels = imgData.join(',')
-		.match(/(\d+,?){1,4}/g)
-		.map(pix => (
-			'rgba('+
-			pix.replace(/,$/, '').split(',')
-				.map((c, ci) =>  ci === 3 ? c / 255 : c)
-				.join(',')+
-			')'
-		));
-	pixels.forEach((p, pi) => {
-		imageCells[pi].style.backgroundColor = p;
-	});
+	const tempImg = new Image();
+	tempImg.onload = () => {
+		tempImg.onload = null;
+		ctx.drawImage(tempImg,x,y,width,height,0,0,width,height);
+		// draw at appropriate crop
+		const imgData = ctx.getImageData(0,0,width,height).data;
+		const pixels = imgData.join(',')
+			.match(/(\d+,?){1,4}/g)
+			.map(pix => (
+				'rgba('+
+				pix.replace(/,$/, '').split(',')
+					.map((c, ci) =>  ci === 3 ? c / 255 : c)
+					.join(',')+
+				')'
+			));
+		pixels.forEach((p, pi) => {
+			imageCells[pi].style.backgroundColor = p;
+		});
+		img.src = canvas.toDataURL();
+	}
+	tempImg.src = result;
 };
-uploader.addEventListener('change', ev => {
+const useUploadedFile = ev => {
 	const file = uploader.files[0];
 	// trigger read
 	if (file) {
 		ctx.clearRect(0,0,canvas.width,canvas.height);
 		reader.readAsDataURL(file);
 	}
-});
+};
+uploader.addEventListener('change', useUploadedFile);
+reuploader.addEventListener('click', useUploadedFile);
 
 /* Artboard Setup */
 // Dark Mode
