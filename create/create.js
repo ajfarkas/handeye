@@ -51,10 +51,9 @@ const createTable = (w, h) => {
 	img.height = 8 * height;
 };
 createTable(width,height);
-// click to draw
-tbody.addEventListener('click', draw);
-// drag and draw
-tbody.addEventListener('mousedown', () => {
+// click/drag and draw
+tbody.addEventListener('mousedown', ev => {
+	draw(ev);
 	imageCells.forEach(cell => {
 		cell.addEventListener('mouseenter', draw);
 	});
@@ -65,7 +64,7 @@ const removeMouseEnter = () => {
 	});
 };
 tbody.addEventListener('mouseup', removeMouseEnter);
-tbody.addEventListener('mouseleave', removeMouseEnter);
+html.addEventListener('mouseleave', removeMouseEnter);
 
 // Choose color
 const picker = document.getElementById('color-picker');
