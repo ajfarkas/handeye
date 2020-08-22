@@ -80,6 +80,9 @@ span, input {
 	box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.4);
 	outline: 1px solid #222;
 }
+.dark .alpha-btn {
+	background-image: url('./create-assets/transparent-bg-dark.png');
+}
 .img-upload {
 	margin-top: 10px;
 	padding: 4px;

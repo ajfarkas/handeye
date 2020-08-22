@@ -24,6 +24,22 @@
 					<input type="number" id="board-h" min="1" step="1" value="16"/>
 				</label>
 				<button type="button" id="board-btn">Clear & Resize</button>
+				<div class="img-upload block">
+					<label class="label" id="upload-label">Upload Image</label>
+					<input type="file" id="upload" accept="image/*" aria-labeledby="#upload-label"/>
+					<label>
+						<button type="button" class="label" id="re-upload">&orarr;</button>
+					</label>
+					<br/>
+					<label>
+						<p class="label">X-Offset</p>
+						<input type="number" id="img-x" step="1" value="0"/>
+					</label>
+					<label>
+						<p class="label">Y-Offset</p>
+						<input type="number" id="img-y" step="1" value="0"/>
+					</label>
+				</div>
 			</form>
 		</fieldset>
 	</div>
@@ -51,22 +67,6 @@
 					<p class="label">Copy Color</p>
 					<button type="button" id="dropper">!</button>
 				</label>
-				<div class="img-upload block">
-					<label class="label" id="upload-label">Upload Image</label>
-					<input type="file" id="upload" accept="image/*" aria-labeledby="#upload-label"/>
-					<label>
-						<button type="button" class="label" id="re-upload">&orarr;</button>
-					</label>
-					<br/>
-					<label>
-						<p class="label">X-Offset</p>
-						<input type="number" id="img-x" step="1" value="0"/>
-					</label>
-					<label>
-						<p class="label">Y-Offset</p>
-						<input type="number" id="img-y" step="1" value="0"/>
-					</label>
-				</div>
 			</form>
 		</fieldset>
 	</div>
