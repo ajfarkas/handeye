@@ -8,6 +8,18 @@ let width = 16;
 let height = 16;
 let color = '#000';
 let dropperActive = false;
+// artboard resizing
+const boardW = document.getElementById('board-w');
+const boardH = document.getElementById('board-h');
+const resizeBtn = document.getElementById('board-btn');
+// set default artboard from localstorage
+if (localStorage.board) {
+	const board = JSON.parse(localStorage.board);
+	width = parseInt(board.width);
+	height = parseInt(board.height);
+}
+boardW.value = width;
+boardH.value = height;
 
 const draw = ev => {
 	const { target } = ev;
@@ -211,15 +223,12 @@ darkBtn.addEventListener('change', ev => {
 	return delete localStorage.darkmode;
 });
 // Resize Artboard
-const boardW = document.getElementById('board-w');
-const boardH = document.getElementById('board-h');
-const resizeBtn = document.getElementById('board-btn');
-
 resizeBtn.addEventListener('click', () => {
 	const w = parseInt(boardW.value);
 	const h = parseInt(boardH.value);
 	width = w;
 	height = h;
+	localStorage.board = JSON.stringify({ width: w, height: h });
 
 	createTable(w, h);
 });
