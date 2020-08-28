@@ -88,12 +88,12 @@ const dropper = document.getElementById('dropper');
 const convertColorValue = colorVal => {
 	if (colorVal.match('rgb')) {
 		const nums = colorVal
-			.replace(/rgba?\((([0-9]{1,3},?\s?){3,4})\)/, '$1')
+			.replace(/rgba?\((([0-9\.]+,?\s?){3,4})\)/, '$1')
 			.split(/,\s?/g);
 		if (nums[3] === 0) colorVal = '';
 		else {
 			const hex = nums.map(n => parseInt(n).toString(16).padStart(2, '0'));
-			colorVal = `#${hex.join('')}`;
+			colorVal = `#${hex.slice(0,3).join('')}`;
 		}
 	} else if (colorVal.match(/^#[0-9a-fA-F]{3}$/)) {
 		const nums = colorVal.replace('#', '')
@@ -115,10 +115,14 @@ const changeColor = ev => {
 		value = getComputedStyle(colorChip).backgroundColor;
 	}
 
-	color = convertColorValue(value);
-	picker.value = color || '#ffffff';
+	hexColor = convertColorValue(value);
+	color = value.match('rgba') ? value : hexColor;
+	picker.value = hexColor || '#ffffff';
 	colorText.value = color;
 	cancelDropper();
+	if (picker.value !== hexColor && picker.value !== '#ffffff') {
+		alert('that\'s not a valid color');
+	}
 };
 
 picker.addEventListener('change', changeColor);
