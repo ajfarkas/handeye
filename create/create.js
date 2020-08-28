@@ -23,7 +23,7 @@ boardH.value = height;
 
 const draw = ev => {
 	const { target } = ev;
-	if (target.tagName !== 'TD') return;
+	if (dropperActive || target.tagName !== 'TD') return;
 	const { coords } = target.dataset;
 	const [x, y] = coords.split(',');
 
