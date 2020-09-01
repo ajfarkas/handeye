@@ -120,6 +120,9 @@ h1,
 	background-size: contain;
 	background-position: center;
 }
+.active.has-bone:before {
+	background-image: url('./assets/HERO_w_bone.png');
+}
 .active.dance:before {
 	background-image: url('./assets/HEROS8bit_Dog_Push_R.png');
 	background-size: calc(var(--bg-unit) * 8);
@@ -235,4 +238,18 @@ h1,
 	0.01% { background-position: calc(var(--bg-unit) * -1) calc(var(--bg-unit) * -10); }
 	49.99% { background-position: calc(var(--bg-unit) * -1) calc(var(--bg-unit) * -10); }
 	50% { background-position: calc(var(--bg-unit) * -0) calc(var(--bg-unit) * -10); }
+}
+/* Items */
+.bone:before {
+	content: '';
+	display: block;
+	width: 100%;
+	height: 100%;
+	background-image: url(assets/bone.png);
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+.active.with-bone:before {
+	background-image: url(assets/HERO_w_bone.png);
 }

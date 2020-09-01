@@ -1,4 +1,7 @@
 const $ = sel => document.querySelector(sel);
+
+let BONES_NUM = 1;
+
 const board = [];
 const spacing = 50;
 let pad = null;
@@ -12,6 +15,7 @@ const position = {
 	x: Math.floor(boardXY.width / 2),
 	y: Math.floor(boardXY.height / 2)
 };
+const carry = [];
 
 
 const touch = (kind, classlist, attr) => {
@@ -49,8 +53,13 @@ const createRow = (len, height) => {
 			const rand = Math.random() * 100;
 			if (rand < 8) cl = 'flower';
 			else if (rand < 80) cl = cl.replace('-', '');
+			else if (rand < 82 && BONES_NUM) {
+				BONES_NUM--;
+				cl = cl.replace('-', ' bone');
+			}
 			else cl += 'shoots';
 		}
+		board[rowIndex].push(cl.split(/-|\s/));
 		// create cell
 		cell = touch('div', `space ${cl}`, {
 			'data-pos': `${colIndex},${rowIndex}`
@@ -96,20 +105,39 @@ const actions = [
 	'dance',
 	'jump'
 ];
+const actionNames = [
+	'danceC',
+	'jump'
+];
 /* Character Positioning */
 const activateSpace = className => {
 	const old = $('.space.active');
 	const list = ['active'];
+	const {x, y} = position;
+	const space = $(`[data-pos="${x},${y}"]`);
+	const boneIndex = board[y][x].indexOf('bone');
+
 	if (old) {
 		old.classList.remove(...actions);
 	}
 	if (className) list.push(className);
+	else if (boneIndex > -1) {
+		console.log('you found the bone!');
+		carry.push('bone');
+		board[y][x].splice(boneIndex, 1);
+		space.classList.remove('bone');
+	}
+	if (carry.indexOf('bone') > -1) list.push('has-bone');
 
-	const space = $(`[data-pos="${position.x},${position.y}"]`)
 	space.classList.add(...list);
-	// space.addEventListener('animationend', () => {
-	// 	space.classList.remove(...actions.slice(1));
-	// }, { once: true });
+	// Try to allow multiple events on a single space
+	const clearAnimation =  ev => {
+		if (actionNames.indexOf(ev.animationName) > -1) {
+			space.removeEventListener('animationend', clearAnimation);
+			space.classList.remove(...actions.slice(1));
+		}
+	};
+	space.addEventListener('animationend', clearAnimation);
 }
 
 const startActivated = () => {
