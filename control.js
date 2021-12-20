@@ -116,6 +116,7 @@ const activateSpace = className => {
 	const {x, y} = position;
 	const space = $(`[data-pos="${x},${y}"]`);
 	const boneIndex = board[y][x].indexOf('bone');
+	const boneEl = $('.has-bone');
 
 	if (old) {
 		old.classList.remove(...actions);
@@ -127,7 +128,10 @@ const activateSpace = className => {
 		board[y][x].splice(boneIndex, 1);
 		space.classList.remove('bone');
 	}
-	if (carry.indexOf('bone') > -1) list.push('has-bone');
+	if (carry.indexOf('bone') > -1) {
+		if (boneEl) boneEl.classList.remove('has-bone');
+		list.push('has-bone');
+	}
 
 	space.classList.add(...list);
 	// Try to allow multiple events on a single space
@@ -139,6 +143,22 @@ const activateSpace = className => {
 	};
 	space.addEventListener('animationend', clearAnimation);
 }
+
+const dropBone = () => {
+	const {x, y} = position;
+	const space = $(`[data-pos="${x},${y}"]`);
+	const carryBoneIndex = carry.indexOf('bone');
+
+	console.log('dropping the bone');
+	// add bone to grass
+	space.classList.add('bone');
+	board[y][x].push('bone');
+	// remove bone from dog
+	if (carryBoneIndex > -1) {
+		carry.splice(carryBoneIndex, 1);
+	}
+	space.classList.remove('has-bone');
+};
 
 const startActivated = () => {
 	if (!started) {
@@ -156,6 +176,7 @@ const moveChar = e => {
 	if (!keyLocking()) return;
 	const {x, y} = position;
 	let spaceClass = undefined;
+	let skipNav = false;
 
 	switch (e.key) {
 		case 'ArrowUp':
@@ -193,12 +214,17 @@ const moveChar = e => {
 		case ' ':
 			spaceClass = 'dance';
 			break;
+		case 'y':
+		case 'Y':
+			dropBone(e);
+			skipNav = true;
+			break;
 		case 'Enter':
 			startActivated();
 			return;
 	}
 	
-	activateSpace(spaceClass);
+	if (!skipNav) activateSpace(spaceClass);
 };
 
 /* Gamepad API */
@@ -312,6 +338,8 @@ const checkPadInput = (timer) => {
 			case 'b':
 				spaceClass = 'dance';
 				break;
+			case 'y':
+				dropBone();
 			default:
 				pressing = false;
 				nav = false;
