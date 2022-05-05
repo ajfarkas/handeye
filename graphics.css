@@ -108,6 +108,9 @@ h1,
 	width: var(--spacing);
 	height: var(--spacing);
 }
+.space.brown-dog:before,
+.space.white-dog:before,
+.space.pink-dog:before,
 .space.active:before {
 	content: '';
 	width: 100%;
@@ -115,10 +118,21 @@ h1,
 	position: absolute;
 	top: 0;
 	left: 0;
-	background-image: url('./assets/HEROS_PixelPackTOPDOWN8BIT_Dog Idle_D.gif');
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-position: center;
+}
+.space.brown-dog:before {
+	background-image: url('./assets/Brown_Dog Idle_D.png');
+}
+.space.white-dog:before {
+	background-image: url('./assets/White_Dog Idle_D.png');
+}
+.space.pink-dog:before {
+	background-image: url('./assets/Pink_Dog Idle_D.png');
+}
+.space.active:before {
+	background-image: url('./assets/HEROS_PixelPackTOPDOWN8BIT_Dog Idle_D.gif');
 }
 .active.has-bone:before {
 	background-image: url('./assets/HERO_w_bone.png');

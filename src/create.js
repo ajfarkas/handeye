@@ -71,7 +71,7 @@ const createTableBody = (size = [boardXY.width, boardXY.height]) => {
 	for (let i = 0; i < height; i++) {
 		body.appendChild(createRow(width, height));
 	}
-
+	console.log('table creation done');
 	return body;
 };
 

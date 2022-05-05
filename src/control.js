@@ -292,4 +292,4 @@ window.addEventListener('gamepaddisconnected', e => {
 window.addEventListener('keydown', moveChar);
 window.addEventListener('keyup', releaseKey);
 
-export default activateSpace;
+export { activateSpace, position };
