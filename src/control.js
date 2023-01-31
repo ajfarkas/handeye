@@ -1,4 +1,5 @@
 import { $, board, boardXY } from './create.js';
+import NPC from './npc.js';
 
 let started = false;
 
@@ -18,6 +19,7 @@ const sfx = $('#sfx');
 music.volume = 0.5;
 sfx.volume = 1;
 
+const NPCs = [];
 const actions = [
 	'active',
 	'dance',
@@ -33,7 +35,7 @@ const position = {
 	y: Math.floor(boardXY.height / 2)
 };
 const carry = [];
-const activateSpace = className => {
+const activateSpace = (className, initial) => {
 	const old = $('.space.active');
 	const list = ['active'];
 	const {x, y} = position;
@@ -65,6 +67,8 @@ const activateSpace = className => {
 		}
 	};
 	space.addEventListener('animationend', clearAnimation);
+
+	if (initial) NPCs.push(new NPC());
 }
 
 const dropBone = () => {
@@ -97,6 +101,7 @@ const startActivated = () => {
 
 const moveChar = e => {
 	if (!keyLocking()) return;
+	const oldPosition = { ...position };
 	const {x, y} = position;
 	let spaceClass = undefined;
 	let skipNav = false;
@@ -147,6 +152,12 @@ const moveChar = e => {
 			return;
 	}
 	
+	NPCs.some(char => {
+		const charPos = char.position;
+		if (position.x === charPos.x && position.y === charPos.y) {
+			Object.assign(position, oldPosition);
+		}
+	});
 	if (!skipNav) activateSpace(spaceClass);
 };
 
