@@ -2,7 +2,7 @@
 const html = document.querySelector('html');
 const canvas = document.getElementById('recording');
 const img = document.getElementById('image');
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext('2d', { willReadFrequently: true });
 const imageCells = [];
 let width = 16;
 let height = 16;
@@ -167,6 +167,7 @@ const cancelDropper = () => {
 };
 
 const uploader = document.getElementById('upload');
+const resize = document.getElementById('resize');
 const reuploader = document.getElementById('re-upload');
 const imgXInput = document.getElementById('img-x');
 const imgYInput = document.getElementById('img-y');
@@ -180,7 +181,26 @@ reader.onloadend = () => {
 	const tempImg = new Image();
 	tempImg.onload = () => {
 		tempImg.onload = null;
-		ctx.drawImage(tempImg,x,y,width,height,0,0,width,height);
+		let sWidth = width;
+		let sHeight = height;
+		if (resize.checked) {
+			const askRatio = width / height;
+			const { width: imgW, height: imgH } = tempImg;
+			const imgRatio = imgW / imgH;
+			const widthRatio = width / imgW;
+			const heightRatio = height / imgH;
+			if (widthRatio === heightRatio) {
+				sWidth = imgW;
+				sHeight = imgH;
+			} else if (widthRatio < heightRatio) {
+				sWidth = imgH * askRatio;
+				sHeight = imgH;
+			} else {
+				sWidth = imgW;
+				sHeight = imgH / askRatio;
+			}
+		}
+		ctx.drawImage(tempImg,x,y,sWidth,sHeight,0,0,width,height);
 		// draw at appropriate crop
 		const imgData = ctx.getImageData(0,0,width,height).data;
 		const pixels = imgData.join(',')
