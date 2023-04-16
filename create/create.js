@@ -196,10 +196,9 @@ reader.onloadend = () => {
 				sWidth = imgH * askRatio;
 				sHeight = imgH;
 			} else if (widthRatio > heightRatio) {
-				sWidth = imgH;
-				sHeight = imgH / askRatio;
+				sWidth = imgW;
+				sHeight = imgW / askRatio;
 			}
-			console.log(askRatio, imgRatio, widthRatio, heightRatio, imgW, imgH, sWidth, sHeight);
 		}
 		ctx.drawImage(tempImg,x,y,sWidth,sHeight,0,0,width,height);
 		// draw at appropriate crop
