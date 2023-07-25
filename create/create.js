@@ -230,6 +230,17 @@ const useUploadedFile = ev => {
 uploader.addEventListener('change', useUploadedFile);
 reuploader.addEventListener('click', useUploadedFile);
 
+/* Floss colors */
+
+const findClosest10 = (r, g, b) => {
+	var n = function(e) {
+		return Math.pow(r - e.r, 2) + Math.pow(g - e.g, 2) + Math.pow(b - e.b, 2)
+	};
+	return allColors.concat().sort(function(e, r) {
+		return n(e) - n(r)
+	}).slice(0, 10)
+};
+
 /* Artboard Setup */
 // Dark Mode
 const darkBtn = document.getElementById('darkmode');
