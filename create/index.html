@@ -10,11 +10,11 @@
 	<div id="setup">
 		<fieldset>
 			<legend>Artboard Setup</legend>
-			<form>
-				<label class="block">
-					<span class="label">Dark Mode</span>
-					<input type="checkbox" id="darkmode"/>
-				</label>
+			<label class="block">
+				<span class="label">Dark Mode</span>
+				<input type="checkbox" id="darkmode"/>
+			</label>
+			<form class="block">
 				<label>
 					<p class="label">Width (px)</p>
 					<input type="number" id="board-w" min="1" step="1" value="16"/>
@@ -24,26 +24,28 @@
 					<input type="number" id="board-h" min="1" step="1" value="16"/>
 				</label>
 				<button type="button" id="board-btn">Clear & Resize</button>
-				<div class="img-upload block">
-					<label class="label" id="upload-label">Upload Image</label>
-					<label class="label" id="resize-label">
-						<input type="checkbox" id="resize" aria-labeledby="#resize-label"/>
-						<span>Scale to fill</span>
-					</label>
-					<input type="file" id="upload" accept="image/*" aria-labeledby="#upload-label"/>
-					<label>
-						<button type="button" class="label" id="re-upload">&orarr;</button>
-					</label>
-					<br/>
-					<label>
-						<p class="label">X-Offset</p>
-						<input type="number" id="img-x" step="1" value="0"/>
-					</label>
-					<label>
-						<p class="label">Y-Offset</p>
-						<input type="number" id="img-y" step="1" value="0"/>
-					</label>
-				</div>
+			</form>
+			<form class="img-upload block">
+				<label class="label block" id="upload-label">Upload Image</label>
+				<label class="label" id="resize-label">Scale</label>
+				<select name="resize" id="resize" aria-labeledby="#resize-label">
+					<option value="none" default>None</option>
+					<option value="fill">Fill</option>
+					<option value="contain">Contain</option>
+				</select>
+				<input type="file" id="upload" accept="image/*" aria-labeledby="#upload-label"/>
+				<label>
+					<button type="button" class="label" id="re-upload">&orarr;</button>
+				</label>
+				<br/>
+				<label>
+					<p class="label">X-Offset</p>
+					<input type="number" id="img-x" step="1" value="0"/>
+				</label>
+				<label>
+					<p class="label">Y-Offset</p>
+					<input type="number" id="img-y" step="1" value="0"/>
+				</label>
 			</form>
 		</fieldset>
 	</div>

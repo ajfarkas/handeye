@@ -172,6 +172,19 @@ const reuploader = document.getElementById('re-upload');
 const imgXInput = document.getElementById('img-x');
 const imgYInput = document.getElementById('img-y');
 const reader = new FileReader();
+
+const resizeValues = tempImg => {
+	const { width: imgW, height: imgH } = tempImg;
+
+	return {
+		askRatio: width / height,
+		imgW,
+		imgH,
+		imgRatio: imgW / imgH,
+		widthRatio: width / imgW,
+		heightRatio: height / imgH
+	};
+};
 // use reader file data to draw to img/canvas
 reader.onloadend = () => {
 	const { result } = reader;
@@ -183,24 +196,52 @@ reader.onloadend = () => {
 		tempImg.onload = null;
 		let sWidth = width;
 		let sHeight = height;
-		if (resize.checked) {
-			const askRatio = width / height;
-			const { width: imgW, height: imgH } = tempImg;
-			const imgRatio = imgW / imgH;
-			const widthRatio = width / imgW;
-			const heightRatio = height / imgH;
-			if (widthRatio === heightRatio) {
-				sWidth = imgW;
-				sHeight = imgH;
-			} else if (widthRatio < heightRatio) {
-				sWidth = imgH * askRatio;
-				sHeight = imgH;
-			} else if (widthRatio > heightRatio) {
-				sWidth = imgW;
-				sHeight = imgW / askRatio;
+		let dx = 0;
+		let dy = 0;
+
+		switch (resize.value) {
+			case 'none':
+				break;
+			case 'fill': {
+				const {askRatio, imgW, imgH, imgRatio, widthRatio, heightRatio} =
+					resizeValues(tempImg);
+
+				if (widthRatio === heightRatio) {
+					sWidth = imgW;
+					sHeight = imgH;
+				} else if (widthRatio < heightRatio) {
+					sWidth = imgH * askRatio;
+					sHeight = imgH;
+				} else if (widthRatio > heightRatio) {
+					sWidth = imgW;
+					sHeight = imgW / askRatio;
+				}
+				break;
+			}
+			case 'contain': {
+				const {askRatio, imgW, imgH, imgRatio, widthRatio, heightRatio} =
+					resizeValues(tempImg);
+
+				if (widthRatio === heightRatio) {
+					sWidth = imgW;
+					sHeight = imgH;
+				} else if (widthRatio < heightRatio) {
+					sWidth = imgW;
+					sHeight = imgH * imgRatio;
+					const heightRatio = imgH / sHeight;
+					const emptyPixels = height - (height * heightRatio);
+					dy = emptyPixels / 2;
+				} else if (widthRatio > heightRatio) {
+					sWidth = imgW / imgRatio;
+					sHeight = imgH;
+					const widthRatio = imgW / sWidth;
+					const emptyPixels = width - (width * widthRatio);
+					dx = emptyPixels / 2;
+				}
+				break;
 			}
 		}
-		ctx.drawImage(tempImg,x,y,sWidth,sHeight,0,0,width,height);
+		ctx.drawImage(tempImg,x,y,sWidth,sHeight,dx,dy,width,height);
 		// draw at appropriate crop
 		const imgData = ctx.getImageData(0,0,width,height).data;
 		const pixels = imgData.join(',')
